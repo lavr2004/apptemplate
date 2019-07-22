@@ -1,4 +1,3 @@
-﻿#coding: utf-8
 import pymysql
 from pymysql.err import OperationalError
 
