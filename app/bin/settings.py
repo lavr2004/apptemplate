@@ -8,12 +8,6 @@ SCHEMA_str = 'app'
 
 class Settings:
     '''Default object with settings to all applicaitons based on it'''
-    settingsfoldertitle_str = 'settings'
-    binfoldertitlte_str = 'bin'
-    datafoldertitle_str = 'data'
-    inputfoldertitle_str = 'input'
-    outputfoldertitle_str = 'output'
-    logfoldertitle_str = 'logs'
 
     def __init__(self, initializer_obj = None, database_obj=None, appfoldertitle_str='app'):
         # database settings
@@ -37,11 +31,6 @@ class Settings:
         self.csvdelimiter_str = ';'
         self.txtdelimiter_str = '\t'
         # basic folders fierarchy
-        self.folders_lst = [self.settingsfoldertitle_str,
-                          self.binfoldertitlte_str,
-                          {self.datafoldertitle_str:[self.inputfoldertitle_str,
-                                                     self.outputfoldertitle_str,
-                                                     self.logfoldertitle_str]}]
         self.paths_dc = dict()
         # logging directory
         self.inputfiletitle_str = 'initialdata.txt'
@@ -57,7 +46,6 @@ class Settings:
         '''Function for instance local working environment'''
         if self.rootdirpath_str[0] != self.systemdelimiter_str:
             self.systemdelimiter_str = '\\'
-        self.__setpaths_cf(self.applicationpath_str, self.folders_lst)
         print('OK - local environment successfully instanced...')
 
     def __instanceenvironment_database_fc(self, database_obj, initializer_obj):
@@ -84,27 +72,6 @@ class Settings:
 
     def makepathtofile_cf(self, folderpath_str, filetitle_str):
         return os.path.join(folderpath_str, filetitle_str)
-
-    def __setpaths_cf(self, processdirpath_str, folders_lst):
-        '''Function for setting paths to folders'''
-        if folders_lst:
-            for foldertitle_obj in folders_lst:
-                if isinstance(foldertitle_obj, str):
-                    foldertitle_str = foldertitle_obj
-                    if foldertitle_str not in self.paths_dc:
-                        checkingtpath_str = self.makepathtofile_cf(processdirpath_str, foldertitle_str)
-                        if not os.path.isdir(checkingtpath_str):
-                            os.mkdir(checkingtpath_str)
-                        self.paths_dc.update({foldertitle_str: checkingtpath_str})
-                else:
-                    for foldertitle_str, subfolders_lst in foldertitle_obj.items():
-                        checkingtpath_str = self.makepathtofile_cf(processdirpath_str, foldertitle_str)
-                        if not os.path.isdir(checkingtpath_str):
-                            os.mkdir(checkingtpath_str)
-                        self.paths_dc.update({foldertitle_str: checkingtpath_str})
-                        if isinstance(subfolders_lst, list):
-                            if len(subfolders_lst):
-                                self.__setpaths_cf(checkingtpath_str, subfolders_lst)
 
     def getfolderpath_cf(self, foldertitle_str):
         return self.paths_dc.get(foldertitle_str)
